@@ -1,4 +1,4 @@
-from copy import deepcopy
+ from copy import deepcopy
 from typing import Dict
 
 from board import Board
