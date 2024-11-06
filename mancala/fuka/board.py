@@ -32,10 +32,11 @@ class Board:
         
     def __hash__(self):
         val = 1
-        for player_ix in range(self.players_num):
-            for 
-            self.data[player_ix][]
-            
+        for player_ix in range(self.players_num) :
+            for hi in range(self.grids_per_player) :
+                val += self.pirces_per_grid
+                val += self.data[player_ix][hi]
+        return val
         
     def move(self, index: int) -> bool:
         """Move the pieces which are in the grid of the given index.
