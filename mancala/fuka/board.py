@@ -19,7 +19,24 @@ class Board:
             [init_pieces_per_grid] * grids_per_player
             + [INITIAL_PIECES_FOR_GRIDS_BETWEEN_PLAYERS] * grids_between_players
         ) * players_num
-
+    
+    def __str__(self):
+        return "|".join([str(i) for i in self.data])
+    
+    def __eq__(self, other):
+        return self.players_num == other.players_num and \
+        self.init_pieces_per_grid == other.init_pieces_per_grid and \
+        self.grids_per_player == other.grids_per_player and \
+        self.grids_between_players == other.grids_between_players and \
+        self.data == other.data
+        
+    def __hash__(self):
+        val = 1
+        for player_ix in range(self.players_num):
+            for 
+            self.data[player_ix][]
+            
+        
     def move(self, index: int) -> bool:
         """Move the pieces which are in the grid of the given index.
 

@@ -1,4 +1,4 @@
- from copy import deepcopy
+from copy import deepcopy
 from typing import Dict
 
 from board import Board
@@ -9,7 +9,9 @@ def search_with_min_max(player_id: int, board: Board) -> Dict[str, int]:
     original_player_id = player_id
 
     def _evaluate(player_id: int, board: Board) -> Dict[str, int]:
-        value = dp.get("|".join([str(i) for i in board.data]) + f"_{player_id}")
+        value = dp.get(str(board) + f"_{player_id}")
+        print("dp size = " + str(len(dp)))
+        print(str(board) + f"_{player_id}")
         if value is not None:
             return value
 
@@ -38,7 +40,7 @@ def search_with_min_max(player_id: int, board: Board) -> Dict[str, int]:
 
             result = {"action": best_action, "value": eval_tables[best_action]}
 
-        dp["|".join([str(i) for i in board.data]) + f"_{player_id}"] = result
+        dp[str(board) + f"_{player_id}"] = result
         return result
 
     return _evaluate(player_id=player_id, board=board)
