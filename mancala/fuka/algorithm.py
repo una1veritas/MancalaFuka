@@ -11,6 +11,7 @@ def search_with_min_max(player_id: int, board: Board) -> Dict[str, int]:
     def _evaluate(player_id: int, board: Board) -> Dict[str, int]:
         value = dp.get(str(board) + f"_{player_id}")
         print("dp size = " + str(len(dp)))
+        print("hash = " + str(hash(board)))
         print(str(board) + f"_{player_id}")
         if value is not None:
             return value

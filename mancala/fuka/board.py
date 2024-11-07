@@ -20,8 +20,8 @@ class Board:
             + [INITIAL_PIECES_FOR_GRIDS_BETWEEN_PLAYERS] * grids_between_players
         ) * players_num
     
-    def __str__(self):
-        return "|".join([str(i) for i in self.data])
+#    def __str__(self):
+#        return "|".join([str(i) for i in self.data])
     
     def __eq__(self, other):
         return self.players_num == other.players_num and \
@@ -31,11 +31,12 @@ class Board:
         self.data == other.data
         
     def __hash__(self):
-        val = 1
-        for player_ix in range(self.players_num) :
-            for hi in range(self.grids_per_player) :
-                val += self.pirces_per_grid
-                val += self.data[player_ix][hi]
+        mask64 = (1<<64) - 1
+        val = 0
+        for ix in range(self.players_num * (self.grids_per_player + self.grids_between_players)) :
+                val = ((val << 4) & mask64) ^ ((val >> 60) & 0xf) 
+                val *= self.init_pieces_per_grid
+                val += self.data[ix]
         return val
         
     def move(self, index: int) -> bool:
@@ -86,9 +87,11 @@ class Board:
         movable_grids = self.get_players_movable_grids(player_id=player_id)
         return len(movable_grids) == 0
 
-    def print_board(self):
+    def __str__(self):
+        val = ''
         for i in range(self.players_num):
             player_start_grid = self.get_player_start_index(i)
             player_last_grid = player_start_grid + self.grids_per_player
-            print(self.data[player_start_grid:player_last_grid])
-            print(self.data[player_last_grid : player_last_grid + self.grids_between_players])
+            val += str(self.data[player_start_grid : player_last_grid])
+            val += str(self.data[player_last_grid : player_last_grid + self.grids_between_players])
+        return val
