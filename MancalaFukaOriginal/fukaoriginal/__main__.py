@@ -9,7 +9,7 @@ class Game:
         self,
         player_classes: List[Type[Player]],
         init_pieces_per_grid: int = 3,
-        grids_per_player: int = 5,
+        grids_per_player: int = 4,
         grids_between_players: int = 1,
         max_turns: int = 100,
     ):
@@ -35,7 +35,7 @@ class Game:
         while True:
             print(f"Turn {turn_n}")
             for player in self.players:
-                print(self.board)
+                self.board.print_board()
                 print(f"Player {player.player_id}")
                 while True:
                     index = player.act(self.board)
@@ -46,7 +46,7 @@ class Game:
 
                 if self.board.does_player_win(player.player_id):
                     print(f"Player {player.player_id} wins!")
-                    print(self.board)
+                    self.board.print_board()
                     return player.player_id
             turn_n += 1
             if turn_n >= self.max_turns:
@@ -59,7 +59,6 @@ if __name__ == "__main__":
     import time
     
     swatch_start = time.time()
-
     game = Game(player_classes=[MinMaxPlayer, MinMaxPlayer], grids_between_players=2)
 
     winner = game.run()

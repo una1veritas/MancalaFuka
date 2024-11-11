@@ -1,20 +1,15 @@
+from copy import deepcopy
 from typing import Dict
 
 from board import Board
 
 
 def search_with_min_max(player_id: int, board: Board) -> Dict[str, int]:
-    dp = list()
-    for id in range(board.players_num):
-        dp.append(dict())
-        
+    dp = {}
     original_player_id = player_id
 
     def _evaluate(player_id: int, board: Board) -> Dict[str, int]:
-        value = dp[player_id].get(board)
-        #print("dp size = {}, {}".format(len(dp[0]), len(dp[1])))
-        #print("hash = " + str(hash(board)))
-        #print(str(board) + f", {player_id}")
+        value = dp.get("|".join([str(i) for i in board.data]) + f"_{player_id}")
         if value is not None:
             return value
 
@@ -22,11 +17,7 @@ def search_with_min_max(player_id: int, board: Board) -> Dict[str, int]:
         eval_tables = {}
         result = None
         for action in candidates.keys():
-            tmp_board = Board(board.players_num, \
-                              board.init_pieces_per_grid, 
-                              board.grids_per_player, \
-                              board.grids_between_players,
-                              board.data)
+            tmp_board = deepcopy(board)
             act_again = tmp_board.move(action)
             if tmp_board.does_player_win(player_id=player_id):
                 if player_id == original_player_id:
@@ -47,7 +38,7 @@ def search_with_min_max(player_id: int, board: Board) -> Dict[str, int]:
 
             result = {"action": best_action, "value": eval_tables[best_action]}
 
-        dp[player_id][board] = result
+        dp["|".join([str(i) for i in board.data]) + f"_{player_id}"] = result
         return result
 
     return _evaluate(player_id=player_id, board=board)

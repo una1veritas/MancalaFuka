@@ -1,4 +1,3 @@
-from copy import deepcopy
 from typing import Dict
 
 INITIAL_PIECES_FOR_GRIDS_BETWEEN_PLAYERS = 0
@@ -11,41 +10,16 @@ class Board:
         init_pieces_per_grid: int = 3,
         grids_per_player: int = 3,
         grids_between_players: int = 1,
-        data : list = None
     ):
         self.players_num = players_num
         self.init_pieces_per_grid = init_pieces_per_grid
         self.grids_per_player = grids_per_player
         self.grids_between_players = grids_between_players
-        if data is None :
-            self.data = (
-                [init_pieces_per_grid] * grids_per_player
-                + [INITIAL_PIECES_FOR_GRIDS_BETWEEN_PLAYERS] * grids_between_players
-            ) * players_num
-        else:
-            self.data = deepcopy(data)
-    
-#    def __str__(self):
-#        return "|".join([str(i) for i in self.data])
-    
-    def __eq__(self, other):
-        return self.players_num == other.players_num and \
-        self.init_pieces_per_grid == other.init_pieces_per_grid and \
-        self.grids_per_player == other.grids_per_player and \
-        self.grids_between_players == other.grids_between_players and \
-        self.data == other.data
-        
-    def __hash__(self):
-        mask64 = (1<<64) - 1
-        val = 0
-        for ix in range(self.players_num * (self.grids_per_player + self.grids_between_players)) :
-                val = (val << 5)
-                val *= self.init_pieces_per_grid
-                val += self.data[ix]
-                val ^= (val >> (64 - 5))
-                val = val & mask64
-        return val
-        
+        self.data = (
+            [init_pieces_per_grid] * grids_per_player
+            + [INITIAL_PIECES_FOR_GRIDS_BETWEEN_PLAYERS] * grids_between_players
+        ) * players_num
+
     def move(self, index: int) -> bool:
         """Move the pieces which are in the grid of the given index.
 
@@ -94,11 +68,9 @@ class Board:
         movable_grids = self.get_players_movable_grids(player_id=player_id)
         return len(movable_grids) == 0
 
-    def __str__(self):
-        val = ''
+    def print_board(self):
         for i in range(self.players_num):
             player_start_grid = self.get_player_start_index(i)
             player_last_grid = player_start_grid + self.grids_per_player
-            val += str(self.data[player_start_grid : player_last_grid])
-            val += str(self.data[player_last_grid : player_last_grid + self.grids_between_players])
-        return val
+            print(self.data[player_start_grid:player_last_grid])
+            print(self.data[player_last_grid : player_last_grid + self.grids_between_players])
