@@ -2,14 +2,14 @@ from typing import List, Optional, Type
 
 from board import Board
 from player import Player
-
+import math
 
 class Game:
     def __init__(
         self,
         player_classes: List[Type[Player]],
         init_pieces_per_grid: int = 3,
-        grids_per_player: int = 5,
+        grids_per_player: int = 3,
         grids_between_players: int = 1,
         max_turns: int = 100,
     ):
@@ -60,9 +60,12 @@ if __name__ == "__main__":
     
     swatch_start = time.time()
 
-    game = Game(player_classes=[MinMaxPlayer, MinMaxPlayer], grids_between_players=2)
+    game = Game(player_classes=[MinMaxPlayer, MinMaxPlayer], \
+                 init_pieces_per_grid = 3, \
+                 grids_per_player = 4, \
+                 grids_between_players = 1 )
 
     winner = game.run()
     swatch_stop = time.time()
     print(f"winner: {winner}")
-    print(swatch_stop - swatch_start)
+    print( math.ceil((swatch_stop - swatch_start)*1000)/1000 )
