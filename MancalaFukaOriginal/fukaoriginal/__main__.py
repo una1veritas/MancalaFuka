@@ -59,8 +59,10 @@ if __name__ == "__main__":
     import time
     
     swatch_start = time.time()
-    game = Game(player_classes=[MinMaxPlayer, MinMaxPlayer], grids_between_players=2)
-
+    game = Game(player_classes=[MinMaxPlayer, MinMaxPlayer], \
+                init_pieces_per_grid=3, \
+                grids_per_player=4, \
+                grids_between_players=1)
     winner = game.run()
     swatch_stop = time.time()
     print(f"winner: {winner}")

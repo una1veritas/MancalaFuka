@@ -23,14 +23,13 @@ class Board:
                 + [INITIAL_PIECES_FOR_GRIDS_BETWEEN_PLAYERS] * grids_between_players
             ) * players_num
         else:
-            self.data = deepcopy(data)
+            self.data = [i for i in data]
     
 #    def __str__(self):
 #        return "|".join([str(i) for i in self.data])
     
     def __eq__(self, other):
         return self.players_num == other.players_num and \
-        self.init_pieces_per_grid == other.init_pieces_per_grid and \
         self.grids_per_player == other.grids_per_player and \
         self.grids_between_players == other.grids_between_players and \
         self.data == other.data
@@ -38,12 +37,12 @@ class Board:
     def __hash__(self):
         mask64 = (1<<64) - 1
         val = 0
-        for ix in range(self.players_num * (self.grids_per_player + self.grids_between_players)) :
-                val = (val << 5)
-                val *= self.init_pieces_per_grid
-                val += self.data[ix]
-                val ^= (val >> (64 - 5))
-                val = val & mask64
+        for ix in range(self.players_num):
+            ms5bits = (val >> (64 - 5)) & 0x1f
+            val <<= 5 
+            val += self.data[ix]
+            val ^= ms5bits
+            val &= mask64
         return val
         
     def move(self, index: int) -> bool:
